@@ -4,6 +4,8 @@ const chalk = require("chalk");
 const figlet = require("figlet");
 const inquirer = require("./lib/inquirer");
 const Package = require("./lib/package");
+const Shipments = require("./lib/shipments");
+const Vehicle = require("./lib/vehicle");
 
 commander
   .command("init")
@@ -16,14 +18,45 @@ commander
       )
     );
     const basicInfo = await inquirer.askBaseDeliveryCost();
-    console.log(basicInfo);
-    const packagesInfo = await inquirer.askPackageDetails(
+
+    const rawPackageInfo = await inquirer.askPackageDetails(
       basicInfo.noOfPackages
     );
 
-    console.log(packagesInfo);
-    const newPackage = new Package(1, 2, 3, 3, basicInfo.baseDeliveryCost);
-    console.table([newPackage, newPackage]);
+    const rawVehicleInfo = await inquirer.askVehicleDetails();
+
+    const packages = Object.entries(rawPackageInfo).map(([_, value]) => {
+      const args = value.split(" ").filter(Boolean);
+      return new Package(
+        args[0],
+        Number(args[1]),
+        Number(args[2]),
+        args[3],
+        basicInfo.baseDeliveryCost,
+        rawVehicleInfo.maxSpeed
+      );
+    });
+
+    const shipments = new Shipments(packages, rawVehicleInfo.maxWeight);
+    shipments.groupByWeight();
+
+    const vehicles = [...Array(rawVehicleInfo.noOfVehicles)].map(
+      (_) => new Vehicle()
+    );
+
+    let i = 0;
+    shipments.toDeliver.forEach(({ shipment }) => {
+      vehicles[i].deliver(shipment);
+      if (i === vehicles.length - 1) {
+        i = 0;
+        vehicles.sort((a, b) => a.currentTime - b.currentTime);
+      } else {
+        i++;
+      }
+    });
+
+    const deliveredPackages = vehicles.map((v) => v.deliveredPackages).flat();
+    console.table(deliveredPackages);
   });
 
 commander.parse(process.argv);
