@@ -4,9 +4,10 @@
   "description": "A cool delivery management tool",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --config ./jest.config.json",
     "start": "node index.js init",
-    "lint": "eslint --fix ./*.js"
+    "lint": "eslint --fix ./*.js",
+    "test:watch": "npm run test -- --watch"
   },
   "keywords": [
     "courier",
@@ -28,6 +29,7 @@
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.3.0",
-    "eslint-plugin-promise": "^6.1.1"
+    "eslint-plugin-promise": "^6.1.1",
+    "jest": "^29.2.1"
   }
 }
