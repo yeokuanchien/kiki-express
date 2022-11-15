@@ -33,16 +33,16 @@ commander
         Number(args[1]),
         Number(args[2]),
         args[3],
-        basicInfo.baseDeliveryCost,
-        rawVehicleInfo.maxSpeed
+        Number(basicInfo.baseDeliveryCost),
+        Number(rawVehicleInfo.maxSpeed)
       );
     });
 
-    const shipments = new Shipments(packages, rawVehicleInfo.maxWeight);
+    const shipments = new Shipments(packages, Number(rawVehicleInfo.maxWeight));
 
     shipments.groupByWeight();
 
-    const vehicles = [...Array(rawVehicleInfo.noOfVehicles)].map(
+    const vehicles = [...Array(Number(rawVehicleInfo.noOfVehicles))].map(
       (_) => new Vehicle()
     );
 
@@ -51,8 +51,6 @@ commander
     delivery.estimateDeliveryTime();
 
     console.table(delivery.deliveredPackages);
-    console.table(delivery.shipments.toDeliver);
-    console.table(delivery.vehicles);
   });
 
 commander.parse(process.argv);
