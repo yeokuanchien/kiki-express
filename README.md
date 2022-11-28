@@ -29,6 +29,11 @@ This is a command line application
 npm install
 ```
 
+## Run Tests
+```
+npm run test
+```
+
 ## Usage
 Step 1 - start the cli application
 ```
@@ -58,6 +63,8 @@ Step 7 - Enter maximum weight vehicle can carry
 ```
 200
 ```
+
+
 
 
 
