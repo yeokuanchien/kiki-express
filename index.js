@@ -18,12 +18,10 @@ commander
         figlet.textSync('Kiki Express', { horizontalLayout: 'full' })
       )
     );
-    const basicInfo = await inquirer.askBaseDeliveryCost();
 
-    const rawPackageInfo = await inquirer.askPackageDetails(
-      basicInfo.noOfPackages
-    );
-
+    const { baseDeliveryCost } = await inquirer.askBaseDeliveryCost();
+    const { noOfPackages } = await inquirer.askNumberOfPacakges();
+    const rawPackageInfo = await inquirer.askPackageDetails(noOfPackages);
     const rawVehicleInfo = await inquirer.askVehicleDetails();
 
     const packages = Object.entries(rawPackageInfo).map(([_, value]) => {
@@ -33,7 +31,7 @@ commander
         Number(args[1]),
         Number(args[2]),
         args[3],
-        Number(basicInfo.baseDeliveryCost),
+        Number(baseDeliveryCost),
         Number(rawVehicleInfo.maxSpeed)
       );
     });
